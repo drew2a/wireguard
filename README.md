@@ -2,26 +2,61 @@
 
 Simplifying routine operations with [WireGuard](https://www.wireguard.com)
 
-# Prerequisites
+## wg-ubuntu-server-up.sh
 
-Install [WireGuard](https://www.wireguard.com) if it's not installed.
+This script:
+
+* Installs all necessary software on an empty Ubuntu DigitalOcean droplet
+(it should also work with most modern Ubuntu images)
+* Configures IPv4 forwarding and iptables rules
+* Creates a server and clients configurations
+* Runs WireGuard
+
+### Usage
+
+```bash
+wg-ubuntu-server-up.sh [<number_of_clients>]
+```
+
+### Example of usage
+
+```bash
+./wg-ubuntu-server-up.sh
+```
+
+```bash
+./wg-ubuntu-server-up.sh 10
+```
 
 ## wg-genconf.sh
 
 This script generate server and clients configs for WireGuard.
 
-If the public IP is not defined, then the public IP of the machine from which the script is run is used.
+If the public IP is not defined, then the public IP of the machine from which 
+the script is run is used.
+If the number of clients is not defined, then used 10 clients.
 
-If the number of clients is not defined, then used 5 clients.
+### Prerequisites
+
+Install [WireGuard](https://www.wireguard.com) if it's not installed.
 
 ### Usage
 
 ```bash
-./wg-genconf.sh [<server_public_ip> <number_of_clients>]
+./wg-genconf.sh [<number_of_clients> [<server_public_ip>]]
 ```
 
 ### Example of usage:
 
 ```bash
-./wg-genconf.sh 157.245.73.253 10
+./wg-genconf.sh
 ```
+
+```bash
+./wg-genconf.sh 10
+```
+
+```bash
+./wg-genconf.sh 10 157.245.73.253 
+```
+

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
+# usage:
+#     wg-genconf.sh [<number_of_clients> [<server_public_ip>]]
 
-#wg-genconf.sh ip 15
-
-server_ip=${1:-$(dig @resolver1.opendns.com ANY myip.opendns.com +short)}
-clients_count=${2:-5}
+clients_count=${1:-10}
+server_ip=${2:-$(dig @resolver1.opendns.com ANY myip.opendns.com +short)}
 
 server_private_key=$(wg genkey)
 server_public_key=$(echo "${server_private_key}" | wg pubkey)
@@ -34,7 +34,6 @@ echo
 #
 for i in $(seq 1 "${clients_count}");
 do
-
     client_private_key=$(wg genkey)
     client_public_key=$(echo "${client_private_key}" | wg pubkey)
     client_ip=10.0.0.$((i+1))/32
@@ -53,11 +52,9 @@ AllowedIPs = 0.0.0.0/0
 Endpoint = ${server_ip}:51820
 PersistentKeepalive = 21
 EOL
-
     cat >> "${server_config}" <<EOL
 [Peer]
 PublicKey = ${client_public_key}
 AllowedIPs = ${client_ip}
 EOL
 done
-
