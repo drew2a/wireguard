@@ -62,6 +62,9 @@ echo ---------------------------------------------install and configure unbound
 sudo apt install -y unbound unbound-host
 
 curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.cache
+echo 'curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.cache' > /etc/cron.monthly/curl_root_hints.sh
+chmod +x /etc/cron.monthly/curl_root_hints.sh
+
 
 cat > /etc/unbound/unbound.conf << ENDOFFILE
 server:
