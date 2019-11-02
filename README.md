@@ -9,8 +9,10 @@ This script:
 * Installs all necessary software on an empty Ubuntu DigitalOcean droplet
 (it should also work with most modern Ubuntu images)
 * Configures IPv4 forwarding and iptables rules
+* Sets up [unbound](https://github.com/NLnetLabs/unbound) dns resolver 
 * Creates a server and clients configurations
-* Runs WireGuard
+* Installs [qrencode](https://github.com/fukuchi/libqrencode/)
+* Runs [WireGuard](https://www.wireguard.com)
 
 ### Usage
 
