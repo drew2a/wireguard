@@ -21,7 +21,7 @@ sudo apt install -y qrencode
 
 echo -------------------------------------------------- download wg-genconfig.sh
 cd "$HOME/wireguard" &&
-wget https://raw.githubusercontent.com/drew2a/wireguard/add-dns-forwarding/wg-genconf.sh
+wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh
 chmod +x ./wg-genconf.sh
 
 echo ----------------------generate configurations for "${clients_count}" clients
