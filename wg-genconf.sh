@@ -21,7 +21,6 @@ Address = 10.0.0.1/24
 SaveConfig = true
 ListenPort = 51820
 PrivateKey = ${server_private_key}
-
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 EOL
@@ -44,7 +43,7 @@ do
 PrivateKey = ${client_private_key}
 ListenPort = 51820
 Address = ${client_ip}
-DNS = 8.8.8.8
+DNS = 10.0.0.1
 
 [Peer]
 PublicKey = ${server_public_key}
