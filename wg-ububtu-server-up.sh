@@ -10,6 +10,9 @@ mkdir -p "/etc/wireguard"
 echo ------------------------------------------------------install linux headers
 sudo apt install -y linux-headers-"$(uname -r)"
 
+echo ------------------------------------------install software-properties-common
+sudo apt install -y software-properties-common
+
 echo ---------------------------------------------------------install wireguard
 sudo add-apt-repository -y ppa:wireguard/wireguard
 sudo apt update && sudo apt upgrade -y
