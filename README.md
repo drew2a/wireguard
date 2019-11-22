@@ -2,6 +2,8 @@
 
 Simplifying routine operations with [WireGuard](https://www.wireguard.com)
 
+* Medium: [How to deploy WireGuard node on a DigitalOcean's droplet](https://medium.com/@drew2a/replace-your-vpn-provider-by-setting-up-wireguard-on-digitalocean-6954c9279b17)
+
 ## wg-ubuntu-server-up.sh
 
 This script:
