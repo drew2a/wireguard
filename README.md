@@ -40,8 +40,6 @@ If the public IP is not defined, then the public IP of the machine from which
 the script is run is used.
 If the number of clients is not defined, then used 10 clients.
 
-### This repo contains a change in wg-genconf.sh file which decides the public interface dynamically. If you don't need it, editing is simple too.
-
 ### Prerequisites
 
 Install [WireGuard](https://www.wireguard.com) if it's not installed.
@@ -66,3 +64,6 @@ Install [WireGuard](https://www.wireguard.com) if it's not installed.
 ./wg-genconf.sh 10 157.245.73.253 
 ```
 
+## Contributors
+
+* [buraksarica](https://github.com/buraksarica)

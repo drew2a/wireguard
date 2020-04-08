@@ -9,10 +9,13 @@ server_private_key=$(wg genkey)
 server_public_key=$(echo "${server_private_key}" | wg pubkey)
 server_config=wg0.conf
 
-#The older code was directly referencing eth0 as the public interface in PostUp&PostDown events. 
-#Let's find that interface's name dynamic. 
-#If you have a different configuration just uncomment and edit the following line and comment the next.
+# The older code was directly referencing eth0 as the public interface in PostUp&PostDown events.
+# Let's find that interface's name dynamic.
+# If you have a different configuration just uncomment and edit the following line and comment the next.
+#
 #server_public_interface=eth0
+#
+#   thanks https://github.com/buraksarica for this improvement.
 server_public_interface=$(route -n | awk '$1 == "0.0.0.0" {print $8}')
 
 echo Generate server \("${server_ip}"\) config:
