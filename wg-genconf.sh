@@ -9,6 +9,12 @@ server_private_key=$(wg genkey)
 server_public_key=$(echo "${server_private_key}" | wg pubkey)
 server_config=wg0.conf
 
+#The older code was directly referencing eth0 as the public interface in PostUp&PostDown events. 
+#Let's find that interface's name dynamic. 
+#If you have a different configuration just uncomment and edit the following line and comment the next.
+#server_public_interface=eth0
+server_public_interface=$(route -n | awk '$1 == "0.0.0.0" {print $8}')
+
 echo Generate server \("${server_ip}"\) config:
 echo
 echo -e "\t$(pwd)/${server_config}"
@@ -21,8 +27,8 @@ Address = 10.0.0.1/24
 SaveConfig = true
 ListenPort = 51820
 PrivateKey = ${server_private_key}
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${server_public_interface} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${server_public_interface} -j MASQUERADE
 EOL
 
 echo
