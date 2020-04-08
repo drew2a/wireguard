@@ -1,8 +1,18 @@
 # Wireguard
 
-Simplifying routine operations with [WireGuard](https://www.wireguard.com)
+This repo aims to simplify routine operations with [WireGuard](https://www.wireguard.com)
 
-* Medium: [How to deploy WireGuard node on a DigitalOcean's droplet](https://medium.com/@drew2a/replace-your-vpn-provider-by-setting-up-wireguard-on-digitalocean-6954c9279b17)
+Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https://medium.com/@drew2a/replace-your-vpn-provider-by-setting-up-wireguard-on-digitalocean-6954c9279b17)
+
+## Quick Start
+
+```bash
+wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ububtu-server-up.sh
+chmod +x ./wg-ububtu-server-up.sh
+./wg-ububtu-server-up.sh 10
+```
+
+To get a full instruction, please follow to the article above.
 
 ## wg-ubuntu-server-up.sh
 
