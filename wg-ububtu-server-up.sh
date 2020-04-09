@@ -3,8 +3,9 @@
 #     wg-ubuntu-server-up.sh [<number_of_clients>]
 
 clients_count=${1:-10}
+working_dir="$HOME/wireguard"
 
-mkdir -p "$HOME/wireguard"
+mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
 
 echo ------------------------------------------------------install linux headers
@@ -23,7 +24,7 @@ echo ----------------------------------------------------------install qrencode
 sudo apt install -y qrencode
 
 echo -------------------------------------------------- download wg-genconfig.sh
-cd "$HOME/wireguard" &&
+cd "${working_dir}" &&
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh
 chmod +x ./wg-genconf.sh
 
@@ -130,6 +131,14 @@ sudo systemctl start unbound
 # show wg
 wg show
 
+echo && echo You can use this config: client1.conf
+echo "--------------------------------------------------------↓"
+cat "${working_dir}/client1.conf"
+echo "--------------------------------------------------------↑"
+
+echo && echo "Or you could find all the generated configs here: ${working_dir}"
+echo
+
 # reboot to make changes effective
-echo all done, reboot...
+echo All done, reboot...
 reboot
