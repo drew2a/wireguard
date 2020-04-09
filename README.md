@@ -1,6 +1,7 @@
 # Wireguard
 
-This repo aims to simplify routine operations with [WireGuard](https://www.wireguard.com)
+This repository contains scripts that make it easy to configure [WireGuard](https://www.wireguard.com)
+on [VPS](https://en.wikipedia.org/wiki/Virtual_private_server).
 
 Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https://medium.com/@drew2a/replace-your-vpn-provider-by-setting-up-wireguard-on-digitalocean-6954c9279b17)
 
@@ -22,7 +23,7 @@ This script:
 * Installs all necessary software on an empty Ubuntu DigitalOcean droplet
 (it should also work with most modern Ubuntu images)
 * Configures IPv4 forwarding and iptables rules
-* Sets up [unbound](https://github.com/NLnetLabs/unbound) dns resolver 
+* Sets up [unbound](https://github.com/NLnetLabs/unbound) DNS resolver 
 * Creates a server and clients configurations
 * Installs [qrencode](https://github.com/fukuchi/libqrencode/)
 * Runs [WireGuard](https://www.wireguard.com)
