@@ -72,8 +72,8 @@ chmod +x /etc/cron.monthly/curl_root_hints.sh
 cat > /etc/unbound/unbound.conf << ENDOFFILE
 server:
     num-threads: 4
-    # enable logs
-    verbosity: 1
+    # disable logs
+    verbosity: 0
     # list of root DNS servers
     root-hints: "/var/lib/unbound/root.hints"
     # use the root server's key for DNSSEC
@@ -104,6 +104,16 @@ server:
     cache-max-ttl: 14400
     prefetch: yes
     prefetch-key: yes
+    # don't use Capitalization randomization as it known to cause DNSSEC issues sometimes
+    # see https://discourse.pi-hole.net/t/unbound-stubby-or-dnscrypt-proxy/9378 for further details
+    use-caps-for-id: no
+    # reduce EDNS reassembly buffer size.
+    # suggested by the unbound man page to reduce fragmentation reassembly problems
+    edns-buffer-size: 1472
+    # ensure kernel buffer is large enough to not lose messages in traffic spikes
+    so-rcvbuf: 1m
+    # ensure privacy of local IP ranges
+    private-address: 10.0.0.0/24
 ENDOFFILE
 
 # give root ownership of the Unbound config
