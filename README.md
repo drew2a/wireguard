@@ -7,6 +7,7 @@ Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https
 
 ## Quick Start
 
+### Ubuntu
 ```bash
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ububtu-server-up.sh
 
@@ -14,9 +15,20 @@ chmod +x ./wg-ububtu-server-up.sh
 ./wg-ububtu-server-up.sh
 ```
 
+
+### Debian
+
+```bash
+wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-debian-server-up.sh
+
+chmod +x ./wg-debian-server-up.sh
+./wg-debian-server-up.sh
+```
+
+
 To get a full instruction, please follow to the article above.
 
-## wg-ubuntu-server-up.sh
+## wg-ububtu-server-up.sh
 
 This script:
 
@@ -27,6 +39,7 @@ This script:
 * Creates a server and clients configurations
 * Installs [qrencode](https://github.com/fukuchi/libqrencode/)
 * Runs [WireGuard](https://www.wireguard.com)
+
 
 ### Usage
 
@@ -43,6 +56,10 @@ wg-ubuntu-server-up.sh [<number_of_clients>]
 ```bash
 ./wg-ubuntu-server-up.sh 10
 ```
+
+## wg-debian-server-up.sh
+
+This script works the same way, that `wg-ububtu-server-up.sh` do.
 
 ## wg-genconf.sh
 
