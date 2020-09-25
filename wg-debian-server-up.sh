@@ -138,7 +138,7 @@ wg show
 
 echo && echo You can use this config: client1.conf
 echo "--------------------------------------------------------↓"
-qrencode -t ansiutf8 < ~/wireguard/client2.conf
+qrencode -t ansiutf8 < ~/wireguard/client1.conf
 echo "--------------------------------------------------------↑"
 echo && echo You can use this config: client1.conf
 echo "--------------------------------------------------------↓"
