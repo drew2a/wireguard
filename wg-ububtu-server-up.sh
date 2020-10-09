@@ -2,23 +2,32 @@
 # usage:
 #     wg-ubuntu-server-up.sh [<number_of_clients>]
 
+set -e # exit when any command fails
+set -x # enable print all commands
+
 clients_count=${1:-10}
 working_dir="$HOME/wireguard"
 
 mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
 
+echo ---------------------------------------------------------update and upgrade
+sudo apt update -y
+sudo apt upgrade -y
+
 echo ------------------------------------------------------install linux headers
 sudo apt install -y linux-headers-"$(uname -r)"
+
+echo ----------------------------------------------------------install net-tools
+sudo apt install net-tools -y
 
 echo ------------------------------------------install software-properties-common
 sudo apt install -y software-properties-common
 
 echo ---------------------------------------------------------install wireguard
-sudo add-apt-repository -y ppa:wireguard/wireguard
-sudo apt update && sudo apt upgrade -y
 sudo apt install -y wireguard
 sudo modprobe wireguard
+
 
 echo ----------------------------------------------------------install qrencode
 sudo apt install -y qrencode
@@ -130,6 +139,8 @@ sudo systemctl start unbound
 
 # show wg
 wg show
+
+set +x # disable print all commands
 
 echo && echo You can use this config: client1.conf
 echo "--------------------------------------------------------↓"
