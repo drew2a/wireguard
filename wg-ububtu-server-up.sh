@@ -12,8 +12,7 @@ mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
 
 echo ---------------------------------------------------------update and upgrade
-sudo apt update -y
-sudo apt upgrade -y
+sudo apt update -y && sudo apt upgrade -y
 
 echo ------------------------------------------------------install linux headers
 sudo apt install -y linux-headers-"$(uname -r)"
@@ -27,7 +26,6 @@ sudo apt install -y software-properties-common
 echo ---------------------------------------------------------install wireguard
 sudo apt install -y wireguard
 sudo modprobe wireguard
-
 
 echo ----------------------------------------------------------install qrencode
 sudo apt install -y qrencode
