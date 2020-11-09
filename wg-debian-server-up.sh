@@ -25,9 +25,6 @@ sudo modprobe wireguard
 echo ----------------------------------------------------------install qrencode
 sudo apt install -y qrencode
 
-echo ----------------------------------------------------------install dnsutils
-sudo apt install -y dnsutils
-
 echo -------------------------------------------------- download wg-genconfig.sh
 cd "${working_dir}" &&
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh

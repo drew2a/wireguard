@@ -2,8 +2,15 @@
 # usage:
 #     wg-genconf.sh [<number_of_clients> [<server_public_ip>]]
 
+set -e # exit when any command fails
+set -x # enable print all commands
+
 clients_count=${1:-10}
-server_ip=${2:-$(dig @resolver1.opendns.com ANY myip.opendns.com +short)}
+
+server_ip=${2}
+if [ -z "$server_ip" ]; then
+  server_ip=$(hostname -I | awk '{print $1;}') # get only first hostname
+fi
 
 server_private_key=$(wg genkey)
 server_public_key=$(echo "${server_private_key}" | wg pubkey)
