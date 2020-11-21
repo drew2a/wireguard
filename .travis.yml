@@ -1,0 +1,8 @@
+git:
+  depth: 1
+
+install:
+  - echo install
+  
+script:
+  - echo script
