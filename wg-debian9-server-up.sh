@@ -2,24 +2,27 @@
 # usage:
 #     wg-ubuntu-server-up.sh [<number_of_clients>]
 
+set -e # exit when any command fails
+set -x # enable print all commands
+
 clients_count=${1:-10}
 working_dir="$HOME/wireguard"
 
 mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
 
+echo ----------------------------------------------------------set backports
+echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+
+echo ---------------------------------------------------------------------update
+sudo apt update -y
+
 echo ------------------------------------------------------install linux headers
 sudo apt install -y linux-headers-"$(uname -r)"
 
-echo ------------------------------------------install software-properties-common
-sudo apt install -y software-properties-common
-
-echo ----------------------------------------------------------install backports
-echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
-apt-get update -y
-
 echo ---------------------------------------------------------install wireguard
-sudo apt install -y wireguard
+sudo apt -t buster-backports -y install wireguard wireguard-tools wireguard-dkms \
+  linux-headers-$(uname -r)
 sudo modprobe wireguard
 
 echo ----------------------------------------------------------install qrencode
@@ -132,6 +135,8 @@ sudo systemctl start unbound
 
 # show wg
 wg show
+
+set +x # disable print all commands
 
 echo && echo You can use this config: client1.conf
 echo "--------------------------------------------------------↓"
