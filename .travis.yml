@@ -9,9 +9,13 @@ matrix:
       dist: focal # ubuntu 20.04
 
 
-
+  TRAVIS_DIST
 install:
-  - echo env
+  -  |
+    if [ $TRAVIS_DIST = "bionic" ] || [ $TRAVIS_DIST = "focal" ]; then
+      wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ubuntu-server-up.sh
+      chmod +x ./wg-ubuntu-server-up.sh
+    fi
 
 script:
   - echo env
