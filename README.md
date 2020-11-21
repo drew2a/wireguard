@@ -9,10 +9,10 @@ Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https
 
 ### Ubuntu
 ```bash
-wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ububtu-server-up.sh
+wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ubuntu-server-up.sh
 
-chmod +x ./wg-ububtu-server-up.sh
-./wg-ububtu-server-up.sh
+chmod +x ./wg-ubuntu-server-up.sh
+./wg-ubuntu-server-up.sh
 ```
 
 
@@ -28,7 +28,7 @@ chmod +x ./wg-debian-server-up.sh
 
 To get a full instruction, please follow to the article above.
 
-## wg-ububtu-server-up.sh
+## wg-ubuntu-server-up.sh
 
 This script:
 
@@ -59,7 +59,7 @@ wg-ubuntu-server-up.sh [<number_of_clients>]
 
 ## wg-debian-server-up.sh
 
-This script works the same way, that `wg-ububtu-server-up.sh` do.
+This script works the same way, that `wg-ubuntu-server-up.sh` do.
 
 ## wg-genconf.sh
 
