@@ -9,7 +9,6 @@ matrix:
       dist: focal # ubuntu 20.04
 
 
-  TRAVIS_DIST
 install:
   -  |
     if [ $TRAVIS_DIST = "bionic" ] || [ $TRAVIS_DIST = "focal" ]; then
