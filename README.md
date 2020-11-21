@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/drew2a/wireguard.svg?branch=master)](https://travis-ci.com/drew2a/wireguard)
+
 # Wireguard
 
 This repository contains scripts that make it easy to configure [WireGuard](https://www.wireguard.com)

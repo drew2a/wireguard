@@ -1,8 +1,17 @@
 git:
   depth: 1
 
+matrix:
+  include:
+    - os: linux
+      dist: bionic # ubuntu 18.04
+    - os: linux
+      dist: focal # ubuntu 20.04
+
+
+
 install:
-  - echo install
-  
+  - echo env
+
 script:
-  - echo script
+  - echo env
