@@ -92,7 +92,3 @@ Install [WireGuard](https://www.wireguard.com) if it's not installed.
 ```bash
 ./wg-genconf.sh 10 157.245.73.253 
 ```
-
-## Contributors
-
-* [buraksarica](https://github.com/buraksarica)
