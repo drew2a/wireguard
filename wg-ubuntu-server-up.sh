@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
 # usage:
 #     wg-ubuntu-server-up.sh [<number_of_clients>]
+#
+#     To disable automatic reboot at the end of the execution:
+#     ```
+#       export WG_SCRIPT_DISABLE_REBOOT=on
+#     ```
 
 set -e # exit when any command fails
 set -x # enable print all commands
+
+# check is root
+if [ "$(id -u)" != 0 ]; then
+  echo Please, run the script as root: \"sudo ./wg-ubuntu-server-up.sh\"
+  exit 1
+fi
 
 clients_count=${1:-10}
 working_dir="$HOME/wireguard"
@@ -12,23 +23,23 @@ mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
 
 echo ---------------------------------------------------------update and upgrade
-sudo apt update -y && sudo apt upgrade -y
+apt update -y && apt upgrade -y
 
 echo ------------------------------------------------------install linux headers
-sudo apt install -y linux-headers-"$(uname -r)"
+apt install -y linux-headers-"$(uname -r)"
 
 echo ----------------------------------------------------------install net-tools
-sudo apt install net-tools -y
+apt install net-tools -y
 
 echo ------------------------------------------install software-properties-common
-sudo apt install -y software-properties-common
+apt install -y software-properties-common
 
 echo ---------------------------------------------------------install wireguard
-sudo apt install -y wireguard
-sudo modprobe wireguard
+apt install -y wireguard
+modprobe wireguard
 
 echo ----------------------------------------------------------install qrencode
-sudo apt install -y qrencode
+apt install -y qrencode
 
 echo -------------------------------------------------- download wg-genconfig.sh
 cd "${working_dir}" &&
@@ -54,24 +65,25 @@ echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/99-sysctl.conf
 
 echo ---------------------------------------------------configure firewall rules
 
-sudo iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-sudo iptables -A INPUT -p udp -m udp --dport 55000 -m conntrack --ctstate NEW -j ACCEPT
-sudo iptables -A INPUT -s 10.0.0.0/24 -p tcp -m tcp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
-sudo iptables -A INPUT -s 10.0.0.0/24 -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 55000 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -s 10.0.0.0/24 -p tcp -m tcp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -s 10.0.0.0/24 -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
 
 # make firewall changes persistent
-echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
-echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections
 
-sudo apt install -y iptables-persistent
+apt install -y iptables-persistent
 
-sudo systemctl enable netfilter-persistent
-sudo netfilter-persistent save
+systemctl enable netfilter-persistent
+netfilter-persistent save
 
 echo ---------------------------------------------install and configure unbound
-sudo apt install -y unbound unbound-host
+apt install -y unbound unbound-host
 
+mkdir -p /var/lib/unbound
 curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.cache
 echo 'curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.cache' > /etc/cron.monthly/curl_root_hints.sh
 chmod +x /etc/cron.monthly/curl_root_hints.sh
@@ -125,15 +137,15 @@ server:
 ENDOFFILE
 
 # give root ownership of the Unbound config
-sudo chown -R unbound:unbound /var/lib/unbound
+chown -R unbound:unbound /var/lib/unbound
 
 # disable systemd-resolved
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
 
 # enable Unbound in place of systemd-resovled
-sudo systemctl enable unbound
-sudo systemctl start unbound
+systemctl enable unbound
+systemctl start unbound
 
 # show wg
 wg show
@@ -152,6 +164,11 @@ echo "--------------------------------------------------------↑"
 echo && echo "Or you could find all the generated configs here: ${working_dir}"
 echo
 
+# if WG_SCRIPT_DISABLE_REBOOT is not set, then
 # reboot to make changes effective
-echo All done, reboot...
-reboot
+if [ -z "${WG_SCRIPT_DISABLE_REBOOT}" ]; then
+  echo All done, reboot...
+  reboot
+fi
+
+exit 0

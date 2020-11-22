@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/drew2a/wireguard.svg?branch=master)](https://travis-ci.com/drew2a/wireguard)
+
 # Wireguard
 
 This repository contains scripts that make it easy to configure [WireGuard](https://www.wireguard.com)
@@ -12,7 +14,7 @@ Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ubuntu-server-up.sh
 
 chmod +x ./wg-ubuntu-server-up.sh
-./wg-ubuntu-server-up.sh
+sudo ./wg-ubuntu-server-up.sh
 ```
 
 
@@ -22,11 +24,18 @@ chmod +x ./wg-ubuntu-server-up.sh
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-debian-server-up.sh
 
 chmod +x ./wg-debian-server-up.sh
-./wg-debian-server-up.sh
+sudo ./wg-debian-server-up.sh
 ```
 
 
 To get a full instruction, please follow to the article above.
+
+### Supported OS
+
+* Ubuntu 18.04
+* Ubuntu 20.04
+* Debian 9
+* Debian 10
 
 ## wg-ubuntu-server-up.sh
 
