@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # usage:
 #     wg-ubuntu-server-up.sh [<number_of_clients>]
+#
+#     To disable automatic reboot at the end of the execution:
+#     ```
+#       export WG_SCRIPT_DISABLE_REBOOT=on
+#     ```
 
 set -e # exit when any command fails
 set -x # enable print all commands
 
-# check user is root
+# check is root
 if [ "$(id -u)" != 0 ]; then
   echo Please, run the script as root: \"sudo ./wg-ubuntu-server-up.sh\"
   exit 1
