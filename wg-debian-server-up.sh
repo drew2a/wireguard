@@ -28,13 +28,11 @@ echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/source
 echo ---------------------------------------------------------------------update
 apt update -y
 
-echo ------------------------------------------------------install linux headers
-apt install -y linux-headers-"$(uname -r)"
+echo --------------------------------------------------------------upgrade kernel
+sudo apt -y install linux-image-amd64 linux-headers-amd64
 
 echo ---------------------------------------------------------install wireguard
-apt -t buster-backports -y install wireguard wireguard-tools wireguard-dkms \
-  linux-headers-$(uname -r)
-modprobe wireguard
+apt -y install wireguard
 
 echo ----------------------------------------------------------install qrencode
 apt install -y qrencode
@@ -53,8 +51,7 @@ mv -v ./wg0.conf \
 chown -v root:root /etc/wireguard/wg0.conf
 chmod -v 600 /etc/wireguard/wg0.conf
 
-echo ------------------------------------------------------------- run wireguard
-wg-quick up wg0
+echo -----------------------------------------------------------add to systemctl
 systemctl enable wg-quick@wg0
 
 echo ------------------------------------------------------enable IPv4 forwarding
@@ -62,7 +59,6 @@ sysctl net.ipv4.ip_forward=1
 echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/99-sysctl.conf
 
 echo ---------------------------------------------------configure firewall rules
-
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p udp -m udp --dport 55000 -m conntrack --ctstate NEW -j ACCEPT
@@ -143,9 +139,6 @@ systemctl disable systemd-resolved
 # enable Unbound in place of systemd-resovled
 systemctl enable unbound
 systemctl start unbound
-
-# show wg
-wg show
 
 set +x # disable print all commands
 

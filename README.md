@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/drew2a/wireguard.svg?branch=master)](https://travis-ci.com/drew2a/wireguard)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2092ead49a2e82b38f64/maintainability)](https://codeclimate.com/github/drew2a/wireguard/maintainability)
 
 # Wireguard
 
