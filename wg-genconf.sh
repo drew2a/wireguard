@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 # usage:
-#     wg-genconf.sh [<number_of_clients> [<server_public_ip>]]
+#     wg-genconf.sh [<number_of_clients> [<dns_ip> [<server_public_ip>]]]
 
 set -e # exit when any command fails
 set -x # enable print all commands
 
+#  clients' count
 clients_count=${1:-10}
 
-server_ip=${2}
+# dns ip
+dns_ip=${2:-10.0.0.1}
+
+# server ip
+server_ip=${3}
 if [ -z "$server_ip" ]; then
   server_ip=$(hostname -I | awk '{print $1;}') # get only first hostname
 fi
+
+
+
 
 server_private_key=$(wg genkey)
 server_public_key=$(echo "${server_private_key}" | wg pubkey)
@@ -59,7 +67,7 @@ do
 PrivateKey = ${client_private_key}
 ListenPort = 51820
 Address = ${client_ip}
-DNS = 10.0.0.1
+DNS = ${dns_ip}
 
 [Peer]
 PublicKey = ${server_public_key}
