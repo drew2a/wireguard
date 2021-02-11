@@ -11,6 +11,7 @@ Medium article: [How to deploy WireGuard node on a DigitalOcean's droplet](https
 ## Quick Start
 
 ### Ubuntu
+
 ```bash
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-ubuntu-server-up.sh
 
@@ -54,8 +55,15 @@ This script:
 ### Usage
 
 ```bash
-wg-ubuntu-server-up.sh [<number_of_clients>]
+wg-ubuntu-server-up.sh [--clients=<clients_count>] [--no-reboot] [--no-unbound]
 ```
+
+Options:
+
+* `--clients=<clients_count>` how many client's configs will be created
+* `--no-unbound` disables Unbound server installation (1.1.1.1 will be used as
+   a default DNS for client's configs)
+* `--no-reboot` disables rebooting at the end of the script execution
 
 ### Example of usage
 
@@ -64,12 +72,13 @@ wg-ubuntu-server-up.sh [<number_of_clients>]
 ```
 
 ```bash
-./wg-ubuntu-server-up.sh 10
+./wg-ubuntu-server-up.sh --clients=10
 ```
 
 ## wg-debian-server-up.sh
 
-This script works the same way, that `wg-ubuntu-server-up.sh` do.
+This script works the same way and with the same options, that
+`wg-ubuntu-server-up.sh` do.
 
 ## wg-genconf.sh
 
@@ -86,8 +95,15 @@ Install [WireGuard](https://www.wireguard.com) if it's not installed.
 ### Usage
 
 ```bash
-./wg-genconf.sh [<number_of_clients> [<server_public_ip>]]
+./wg-genconf.sh [<number_of_clients> [<dns_ip> [<server_public_ip>]]]
 ```
+
+Where:
+
+* `number_of_clients` how many client's configs will be generated
+* `dns_ip` the script should use this IP as a DNS address
+* `server_public_ip` the script should use this IP as a server address
+
 
 ### Example of usage:
 
@@ -100,5 +116,9 @@ Install [WireGuard](https://www.wireguard.com) if it's not installed.
 ```
 
 ```bash
-./wg-genconf.sh 10 157.245.73.253 
+./wg-genconf.sh 10 1.1.1.1
+```
+
+```bash
+./wg-genconf.sh 10 1.1.1.1 157.245.73.253
 ```
