@@ -4,20 +4,29 @@ sudo: required
 git:
   depth: 1
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: bionic # ubuntu 18.04
+      env: UBUNTU_18_04=
+      script: sudo ${TRAVIS_BUILD_DIR}/wg-ubuntu-server-up.sh --no-reboot
+
     - os: linux
       dist: focal # ubuntu 20.04
+      env: UBUNTU_20_04=
+      script: sudo ${TRAVIS_BUILD_DIR}/wg-ubuntu-server-up.sh --no-reboot
 
-env:
-  global:
-    - WG_SCRIPT_DISABLE_REBOOT=on
+    - os: linux
+      dist: focal # ubuntu 20.04
+      env: UBUNTU_20_04= NO_UNBOUND=
+      script: sudo ${TRAVIS_BUILD_DIR}/wg-ubuntu-server-up.sh --no-reboot --no-unbound
+
+    - os: linux
+      dist: focal # ubuntu 20.04
+      env: UBUNTU_20_04= NO_UNBOUND= CLIENTS=1
+      script: sudo ${TRAVIS_BUILD_DIR}/wg-ubuntu-server-up.sh --no-reboot --no-unbound --clients=1
 
 install:
   # enable ipv6
   - sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
 
-script:
-  - sudo ${TRAVIS_BUILD_DIR}/wg-ubuntu-server-up.sh

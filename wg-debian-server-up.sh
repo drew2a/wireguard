@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 # usage:
-#     wg-ubuntu-server-up.sh [<number_of_clients>]
+#     wg-ubuntu-server-up.sh [--clients=<clients_count>] [--no-reboot] [--no-unbound]
 #
-#     To disable automatic reboot at the end of the execution:
-#     ```
-#       export WG_SCRIPT_DISABLE_REBOOT=on
-#     ```
 
 set -e # exit when any command fails
 set -x # enable print all commands
 
-# check is root
+# constants:
+working_dir="$HOME/wireguard"
+
+# inputs:
+clients=10
+reboot_enabled=true
+unbound_enabled=true
+
+for arg in "$@"
+do
+  [[ "${arg}" == "--no-reboot" ]] && reboot_enabled=
+  [[ "${arg}" == "--no-unbound" ]] && unbound_enabled=
+  [[ "${arg}" == "--clients="* ]] && clients=${arg#*=}
+done
+
+# check a user is root
 if [ "$(id -u)" != 0 ]; then
   echo Please, run the script as root: \"sudo ./wg-ubuntu-server-up.sh\"
   exit 1
 fi
-
-clients_count=${1:-10}
-working_dir="$HOME/wireguard"
 
 mkdir -p "${working_dir}"
 mkdir -p "/etc/wireguard"
@@ -42,8 +50,14 @@ cd "${working_dir}" &&
 wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh
 chmod +x ./wg-genconf.sh
 
-echo ----------------------generate configurations for "${clients_count}" clients
-./wg-genconf.sh "${clients_count}"
+echo ----------------------generate configurations for "${clients}" clients
+if [[ ${unbound_enabled} ]]; then
+   # use the wireguard server as a DNS resolver
+  ./wg-genconf.sh "${clients}"
+else
+  # use the cloudflare as a DNS resolver
+  ./wg-genconf.sh "${clients}" "1.1.1.1"
+fi
 
 echo -----------------------------------move server\'s config to /etc/wireguard/
 mv -v ./wg0.conf \
@@ -74,15 +88,16 @@ apt install -y iptables-persistent
 systemctl enable netfilter-persistent
 netfilter-persistent save
 
-echo ---------------------------------------------install and configure unbound
-apt install -y unbound unbound-host
+if [[ ${unbound_enabled} ]]; then
+  echo ---------------------------------------------install and configure unbound
+  apt install -y unbound unbound-host
 
-echo 'wget https://www.internic.net/domain/named.cache -O /var/lib/unbound/root.hints' > /etc/cron.monthly/curl_root_hints.sh
-chmod +x /etc/cron.monthly/curl_root_hints.sh
-/etc/cron.monthly/curl_root_hints.sh
+  echo 'wget https://www.internic.net/domain/named.cache -O /var/lib/unbound/root.hints' > /etc/cron.monthly/curl_root_hints.sh
+  chmod +x /etc/cron.monthly/curl_root_hints.sh
+  /etc/cron.monthly/curl_root_hints.sh
 
 
-cat > /etc/unbound/unbound.conf << ENDOFFILE
+  cat > /etc/unbound/unbound.conf << ENDOFFILE
 server:
     num-threads: 4
     # disable logs
@@ -129,16 +144,17 @@ server:
     private-address: 10.0.0.0/24
 ENDOFFILE
 
-# give root ownership of the Unbound config
-chown -R unbound:unbound /var/lib/unbound
+  # give root ownership of the Unbound config
+  chown -R unbound:unbound /var/lib/unbound
 
-# disable systemd-resolved
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
+  # disable systemd-resolved
+  systemctl stop systemd-resolved
+  systemctl disable systemd-resolved
 
-# enable Unbound in place of systemd-resovled
-systemctl enable unbound
-systemctl start unbound
+  # enable Unbound in place of systemd-resovled
+  systemctl enable unbound
+  systemctl start unbound
+fi
 
 set +x # disable print all commands
 
@@ -156,7 +172,7 @@ echo
 
 # if WG_SCRIPT_DISABLE_REBOOT is not set, then
 # reboot to make changes effective
-if [ -z "${WG_SCRIPT_DISABLE_REBOOT}" ]; then
+if [[ ${reboot_enabled} ]]; then
   echo All done, reboot...
   reboot
 fi
