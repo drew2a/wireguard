@@ -36,6 +36,7 @@ To get a full instruction, please follow to the article above.
 
 * Ubuntu 18.04
 * Ubuntu 20.04
+* Ubuntu 22.04
 * Debian 9
 * Debian 10
 
